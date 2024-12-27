@@ -31,10 +31,11 @@ def matrix_alpha(matrix, alpha):
 
     # Eigenvalue decomposition
     eigvals, eigvecs = torch.linalg.eigh(matrix)
+    eigvals += 1e-6
     eigvals = eigvals ** alpha
-
     # Construct result matrix
     result_matrix = eigvecs @ torch.diag(eigvals) @ eigvecs.T
+
     return result_matrix
 def main(args):
     # setting random seed of numpy and torch
@@ -106,7 +107,7 @@ def main(args):
         f.write(f"{args}\n")
         f.write(f"{result}\n")
     if args.dump_huggingface_model:
-        save_path = f"{args.model_id.split('/')[-1]}_ratio-{args.kv_cache_ratio_target}_sample-{args.n_calib_samples}_alpha-{args.alpha}"
+        save_path = f"{args.model_id.split('/')[-1]}_ratio-{args.kv_cache_ratio_target}_sample-{args.n_calib_samples}_alpha-{args.alpha}-{args.scaling_method}"
         tokenizer.save_pretrained(save_path)
         model.save_pretrained(save_path)
         config = model.config.to_dict()

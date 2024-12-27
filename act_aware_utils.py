@@ -90,7 +90,7 @@ def calib_input_distribution(model, calib_loader, method, use_cache=True):
 
     for name, module in model.named_modules():
         if isinstance(module, nn.Linear) and ("k_proj" in name or "v_proj" in name):
-            module.scaling_diag_matrix = torch.zeros_like(module.weight, dtype=torch.float32)  # 确保初始化为 torch.float32 类型
+            module.scaling_diag_matrix = 0
             module.register_forward_hook(hook)
 
     # get activation distribution
