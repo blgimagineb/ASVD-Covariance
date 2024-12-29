@@ -24,14 +24,8 @@ def matrix_alpha(matrix, alpha):
 
     # Print matrix information for debugging
     matrix = torch.where(torch.isnan(matrix), torch.zeros_like(matrix), matrix)
-
-    # Add numerical stability
-    epsilon = 1e-6
-    matrix = matrix + epsilon * torch.eye(matrix.size(0), device=matrix.device)
-
-    # Eigenvalue decomposition
     eigvals, eigvecs = torch.linalg.eigh(matrix)
-    eigvals += 1e-6
+    eigvals[eigvals < 0] = 1e-6
     eigvals = eigvals ** alpha
     # Construct result matrix
     result_matrix = eigvecs @ torch.diag(eigvals) @ eigvecs.T
