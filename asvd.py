@@ -25,7 +25,7 @@ def matrix_alpha(matrix, alpha):
     # Print matrix information for debugging
     matrix = torch.where(torch.isnan(matrix), torch.zeros_like(matrix), matrix)
     eigvals, eigvecs = torch.linalg.eigh(matrix)
-    eigvals[eigvals < 0] = 0
+    eigvals[eigvals <= 0] = 1e-6
     eigvals = eigvals ** alpha
     # Construct result matrix
     result_matrix = eigvecs @ torch.diag(eigvals) @ eigvecs.T
